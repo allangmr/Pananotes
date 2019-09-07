@@ -8,7 +8,7 @@ use App\Nota;
 
 class NotaController extends Controller
 {
-     /**
+    /**
      * Create a new controller instance.
      *
      * @return void
@@ -27,7 +27,7 @@ class NotaController extends Controller
         //
         $username = auth()->user()->username;
         $notas = Nota::where('usuario', $username)->paginate(5);
-        return view('notas.lista',compact('notas'));
+        return view('notas.lista', compact('notas'));
     }
 
     /**
@@ -53,7 +53,7 @@ class NotaController extends Controller
         $nota->descripcion = $request->descripcion;
         $nota->usuario = auth()->user()->username;
         $nota->save();
-    
+
         return back()->with('mensaje', 'Nota Agregada!');
     }
 
@@ -65,7 +65,9 @@ class NotaController extends Controller
      */
     public function show($id)
     {
-        //
+        $username = auth()->user()->username;
+        $nota = Nota::where('usuario', $username)->findOrFail($id);
+        return view('notas.editar', compact('nota'));
     }
 
     /**
@@ -75,9 +77,7 @@ class NotaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {
-        //
-    }
+    { }
 
     /**
      * Update the specified resource in storage.
@@ -88,7 +88,12 @@ class NotaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $username = auth()->user()->username;
+        $notaActualizada = Nota::where('usuario', $username)->findOrFail($id);
+        $notaActualizada->nombre = $request->nombre;
+        $notaActualizada->descripcion = $request->descripcion;
+        $notaActualizada->save();
+        return back()->with('mensaje', 'Nota editada!');
     }
     /**
      * Remove the specified resource from storage.
@@ -98,6 +103,10 @@ class NotaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $username = auth()->user()->username;
+        $notaEliminar = Nota::where('usuario', $username)->findOrFail($id);;
+        $notaEliminar->delete();
+
+        return back()->with('mensaje', 'Nota Eliminada');
     }
 }

@@ -25,7 +25,16 @@
                                         <th scope="row">{{ $item->id }}</th>
                                         <td>{{ $item->nombre }}</td>
                                         <td>{{ $item->descripcion }}</td>
-                                        <td>Acción</td>
+                                        <td>
+                                            <form action="{{route('notas.show', $item)}}" method="get" class="d-inline">
+                                                <button type="submit" class="btn btn-warning btn-sm">Editar</button>
+                                            </form>
+                                            <form action="{{ route('notas.destroy', $item) }}" class="d-inline" method="POST">
+                                                    @method('DELETE')
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                            </form> 
+                                        </td>
                                     </tr>
                                     @endforeach
                                 </tbody>
